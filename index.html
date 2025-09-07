@@ -99,7 +99,8 @@
             margin-bottom: 1.5rem;
             z-index: 50;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-            transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+            transition: transform 200ms ease, opacity 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+            will-change: transform, opacity;
         }
 
         .live-status.minimized {
@@ -111,6 +112,8 @@
             cursor: pointer;
             width: 50px;
             height: 50px;
+            backdrop-filter: none;
+            box-shadow: none;
         }
 
         .status-content {
@@ -119,11 +122,12 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 1rem; /* tighter spacing */
-            transition: opacity 0.3s ease-in-out;
+            transition: opacity 180ms ease, transform 180ms ease;
         }
 
         .live-status.minimized .status-content {
             opacity: 0;
+            transform: translateY(-6px);
             pointer-events: none;
             height: 0;
             overflow: hidden;
@@ -239,7 +243,7 @@
         .next-meta {
             display: flex;
             gap: 0.75rem;
-            font-size: 0.95rem; /* larger for readability */
+            font-size: 1rem; /* larger for readability */
             color: var(--text-secondary);
             font-weight: 500;
             white-space: nowrap;
@@ -478,7 +482,7 @@
             align-items: center;
             gap: 0.5rem;
             color: var(--text-secondary);
-            font-size: 1rem;
+            font-size: 1.1rem; /* larger for readability */
             font-weight: 500;
         }
 
@@ -489,23 +493,25 @@
         }
 
         .detail-item svg {
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
             opacity: 0.8;
             flex: 0 0 auto;
         }
 
         .next-room {
-            font-size: 1.1rem;
-            color: var(--accent-yellow);
-            font-weight: 600;
-            margin-top: 0; /* inline layout removes vertical offset */
+            display: none; /* hidden: room moved next to time */
         }
 
         .room-number {
             color: var(--accent-yellow);
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+        }
+
+        .detail-item .sep {
+            opacity: 0.7;
+            margin: 0 0.25rem;
         }
 
         /* Break Time */
@@ -596,16 +602,23 @@
             }
 
             .detail-item {
-                font-size: 1.15rem; /* improve readability */
+                font-size: 1.3rem; /* improve readability */
             }
 
             .detail-item svg {
-                width: 18px;
-                height: 18px;
+                width: 20px;
+                height: 20px;
             }
 
             .schedule-grid {
                 grid-template-columns: 1fr; /* prevent horizontal scroll */
+            }
+        }
+
+        /* Respect reduced motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+            .live-status, .status-content {
+                transition: none;
             }
         }
     </style>
@@ -824,10 +837,8 @@
                 document.getElementById('nextClassName').textContent = nextClass.name;
                 document.getElementById('nextClassTime').innerHTML =
                     `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    ${nextDay}${daysUntil > 0 ? ` (+${daysUntil} day${daysUntil > 1 ? 's' : ''})` : ''} at ${nextClass.time.split('–')[0]}`;
-                document.getElementById('nextClassRoom').innerHTML =
-                    `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    Room: ${nextClass.room}`;
+                    ${nextDay}${daysUntil > 0 ? ` (+${daysUntil} day${daysUntil > 1 ? 's' : ''})` : ''} at ${nextClass.time.split('–')[0]} <span class="sep">|</span> <span class="room-number">${nextClass.room}</span>`;
+                document.getElementById('nextClassRoom').textContent = '';
                 
                 if (days > 0) {
                     document.getElementById('countdownValue').textContent = `${days}d ${hours}h ${minutes}m`;
@@ -934,18 +945,11 @@
                                 <span class="class-type ${cls.type}">${cls.type}</span>
                             </div>
                             <div class="class-details">
-                                <div class="detail-item">
+                                <div class="detail-item detail-inline">
                                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
-                                    ${cls.time}
-                                </div>
-                                <div class="detail-item">
-                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    </svg>
-                                    <span class="room-number">Room ${cls.room}</span>
+                                    ${cls.time} <span class="sep">|</span> <span class="room-number">${cls.room}</span>
                                 </div>
                             </div>
                         </div>
