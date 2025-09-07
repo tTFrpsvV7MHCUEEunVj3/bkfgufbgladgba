@@ -482,6 +482,12 @@
             font-weight: 500;
         }
 
+        /* Emphasize time row for readability */
+        .class-details .detail-item:first-child {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
         .detail-item svg {
             width: 16px;
             height: 16px;
@@ -499,19 +505,23 @@
         .room-number {
             color: var(--accent-yellow);
             font-weight: 600;
+            font-size: 1.1rem;
         }
 
         /* Break Time */
         .break-time {
-            padding: 0.25rem 0; /* tighter */
+            padding: 0.35rem 0.5rem; /* slightly more padding for clarity */
             margin: 0.25rem 0 0.5rem 0; /* less height */
-            color: var(--text-dim);
-            font-size: 0.95rem;
-            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.5rem;
             padding-left: 0.75rem;
+            background: rgba(16, 185, 129, 0.08);
+            border-left: 3px solid var(--accent-green);
+            border-radius: 8px;
         }
 
         .break-duration {
@@ -536,6 +546,9 @@
             
             .live-status {
                 position: static;
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
             }
 
             .status-content {
@@ -557,11 +570,42 @@
                 gap: 0.5rem;
             }
 
+            /* Keep next-class within viewport */
             .next-class-info {
                 flex-direction: column;
                 align-items: stretch;
                 gap: 0.5rem;
                 padding: 0.25rem 0.5rem;
+                width: 100%;
+                max-width: 100%;
+                overflow: hidden;
+                box-sizing: border-box;
+            }
+
+            .next-title,
+            .next-meta {
+                white-space: normal; /* allow wrap on small screens */
+            }
+
+            .next-title {
+                overflow-wrap: anywhere; /* prevent overflow on long names */
+            }
+
+            .countdown-value {
+                font-size: 1.3rem; /* improve visibility */
+            }
+
+            .detail-item {
+                font-size: 1.15rem; /* improve readability */
+            }
+
+            .detail-item svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            .schedule-grid {
+                grid-template-columns: 1fr; /* prevent horizontal scroll */
             }
         }
     </style>
