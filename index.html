@@ -39,8 +39,8 @@
             color: var(--text-primary);
             min-height: 100vh;
             position: relative;
-            font-size: 16px; /* Base font size */
-            line-height: 1.6;
+            font-size: 18px; /* Increased base font for low vision */
+            line-height: 1.5;
         }
 
         /* Simple gradient background */
@@ -99,7 +99,7 @@
             margin-bottom: 1.5rem;
             z-index: 50;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-            transition: all 0.3s ease-in-out;
+            transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
 
         .live-status.minimized {
@@ -118,7 +118,7 @@
             flex-direction: row;
             align-items: center;
             flex-wrap: wrap;
-            gap: 1.5rem;
+            gap: 1rem; /* tighter spacing */
             transition: opacity 0.3s ease-in-out;
         }
 
@@ -175,12 +175,12 @@
         .next-class-info {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.5rem; /* tighter spacing */
             padding: 0.25rem 0.5rem;
             background: rgba(30, 40, 0.7);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            min-height: 40px;
+            min-height: 36px; /* more compact */
         }
 
         .next-class-info.lecture {
@@ -219,13 +219,16 @@
 
         .next-details {
             display: flex;
-            flex-direction: column;
+            flex-direction: row; /* inline for compactness */
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem;
             flex: 1;
             min-width: 0;
         }
 
         .next-title {
-            font-size: 1rem;
+            font-size: 1.1rem; /* slightly larger for readability */
             font-weight: 500;
             color: var(--text-primary);
             white-space: nowrap;
@@ -236,9 +239,10 @@
         .next-meta {
             display: flex;
             gap: 0.75rem;
-            font-size: 0.85rem;
+            font-size: 0.95rem; /* larger for readability */
             color: var(--text-secondary);
-            font-weight: 400;
+            font-weight: 500;
+            white-space: nowrap;
         }
 
         .next-time, .next-room {
@@ -249,23 +253,24 @@
 
         .countdown {
             display: flex;
-            flex-direction: column;
+            flex-direction: row; /* inline to reduce height */
             align-items: center;
-            gap: 0.1rem;
-            padding: 0.25rem 0.4rem;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 4px;
-            min-width: 60px;
+            gap: 0.25rem;
+            padding: 0.2rem 0.4rem;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            min-width: 56px;
         }
 
         .countdown-value {
-            font-size: 1rem;
-            font-weight: 500;
+            font-size: 1.2rem;
+            font-weight: 600;
             color: var(--accent-yellow);
             font-variant-numeric: tabular-nums;
         }
 
         .countdown-label {
+            display: none;
             font-size: 0.65rem;
             color: var(--text-secondary);
             text-align: center;
@@ -275,7 +280,9 @@
         /* Days Grid */
         .schedule-grid {
             display: grid;
-            gap: 1.5rem;
+            gap: 1.25rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* multi-column layout */
+            align-items: start;
         }
 
         /* Day Card */
@@ -319,6 +326,12 @@
             padding-bottom: 0.75rem;
             border-bottom: 1px solid var(--border-color);
             cursor: pointer;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .day-header:focus {
+            outline: none;
         }
 
         .day-name {
@@ -372,8 +385,8 @@
         /* Class Item */
         .class-item {
             position: relative;
-            margin-bottom: 0.75rem;
-            padding: 1rem;
+            margin-bottom: 0.5rem; /* reduce vertical spacing */
+            padding: 0.75rem; /* tighter padding */
             background: var(--glass);
             border: 1px solid var(--border-color);
             border-left: 3px solid transparent;
@@ -414,12 +427,12 @@
         .class-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 0.5rem;
+            align-items: center; /* center for tighter block */
+            margin-bottom: 0.4rem;
         }
 
         .class-title {
-            font-size: 1.2rem;
+            font-size: 1.25rem; /* slightly larger to compensate tighter layout */
             font-weight: 600;
             color: var(--text-primary);
         }
@@ -452,10 +465,12 @@
 
         .class-details {
             display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            margin-top: 0.5rem;
-            gap: 0.25rem;
+            flex-direction: row; /* horizontal layout */
+            align-items: center;
+            justify-content: space-between; /* separate time and room */
+            margin-top: 0.25rem;
+            gap: 0.75rem;
+            flex-wrap: wrap;
         }
 
         .detail-item {
@@ -471,13 +486,14 @@
             width: 16px;
             height: 16px;
             opacity: 0.8;
+            flex: 0 0 auto;
         }
 
         .next-room {
             font-size: 1.1rem;
             color: var(--accent-yellow);
             font-weight: 600;
-            margin-top: 0.5rem;
+            margin-top: 0; /* inline layout removes vertical offset */
         }
 
         .room-number {
@@ -487,15 +503,15 @@
 
         /* Break Time */
         .break-time {
-            padding: 0.5rem 0;
-            margin: 0.25rem 0 0.75rem 0;
+            padding: 0.25rem 0; /* tighter */
+            margin: 0.25rem 0 0.5rem 0; /* less height */
             color: var(--text-dim);
-            font-size: 1rem;
-            font-weight: 400;
+            font-size: 0.95rem;
+            font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            padding-left: 1rem;
+            gap: 0.4rem;
+            padding-left: 0.75rem;
         }
 
         .break-duration {
@@ -515,7 +531,7 @@
             }
             
             h1 {
-                font-size: 1.75rem;
+                font-size: 2rem;
             }
             
             .live-status {
@@ -525,11 +541,11 @@
             .status-content {
                 flex-direction: column;
                 align-items: stretch;
-                gap: 1rem;
+                gap: 0.75rem;
             }
             
             .time-display {
-                font-size: 1.5rem;
+                font-size: 2rem;
             }
             
             .day-card {
@@ -537,8 +553,8 @@
             }
             
             .class-details {
-                align-items: flex-start;
-                gap: 0.25rem;
+                align-items: center;
+                gap: 0.5rem;
             }
 
             .next-class-info {
@@ -766,7 +782,7 @@
                     `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     ${nextDay}${daysUntil > 0 ? ` (+${daysUntil} day${daysUntil > 1 ? 's' : ''})` : ''} at ${nextClass.time.split('–')[0]}`;
                 document.getElementById('nextClassRoom').innerHTML =
-                    `<svg xmlns="http://www.w3.org/200/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 111.314 0z"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                     Room: ${nextClass.room}`;
                 
                 if (days > 0) {
